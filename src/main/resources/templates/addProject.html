@@ -1,0 +1,16 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form>
+    <input type="text" name="text" placeholder="Введите название нового проекта"/>
+    <button type="submit">Добавить</button>
+</form>
+
+<div th:each="el : ${projects}" class="alert alert-info mt-2">
+    <h3 th:text="${el.name}"/>
+</div>
+</body>
+</html>
