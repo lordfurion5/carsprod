@@ -1,11 +1,11 @@
 package management.system.at.an.IT.enterprise.demo.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-public class Users {
+public class Developers {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -24,9 +24,22 @@ public class Users {
     public String getName() {
         return name;
     }
+    public Developers(){
 
+    }
+    public Developers(String name){
+        this.name=name;
+    }
 
     public void setName(String name) {
         this.name = name;
     }
+
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Tasks> tasks = new ArrayList<>();
+
 }

@@ -1,9 +1,9 @@
 package management.system.at.an.IT.enterprise.demo.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class ProjectManager {
     @Id
@@ -19,7 +19,12 @@ public class ProjectManager {
     public void setId(long id) {
         this.id = id;
     }
+    public ProjectManager(){
 
+    }
+    public ProjectManager(String name){
+        this.name=name;
+    }
 
     public String getName() {
         return name;
@@ -29,4 +34,11 @@ public class ProjectManager {
     public void setName(String name) {
         this.name = name;
     }
+
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Project> projects = new ArrayList<>();
 }

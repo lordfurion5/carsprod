@@ -10,10 +10,11 @@
 </head>
 <header th:insert="blocks/header :: header"></header>
 <body>
-<form action="/addProject" method="post">
-    <input type="textarea" name="name" placeholder="Введите название нового проекта"/>
-    <input type="textarea" name="project_manager_id" placeholder="Введите id менеджера проекта"/>
-    <input type="textarea" name="team_lead_id" placeholder="Введите id руководителя группы"/>
+<form action="/addTask" method="post">
+    <input type="textarea" name="name" placeholder="Введите название задачи"/>
+    <input type="textarea" name="desc" placeholder="Введите описание задачи"/>
+    <input type="textarea" name="project_id" placeholder="Введите id проекта"/>
+    <input type="textarea" name="developer_id" placeholder="Введите id разработчика"/>
     <button type="submit">Добавить</button>
 </form>
 

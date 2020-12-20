@@ -1,18 +1,17 @@
 package management.system.at.an.IT.enterprise.demo.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    public long id;
 
-    private String name;
+    public String name;
 
     public Project(){
 
@@ -37,4 +36,28 @@ public class Project {
     public void setName(String name) {
         this.name = name;
     }
+
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Tasks> tasks = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ProjectManager projectManager;
+    public ProjectManager getProjectManager() {
+        return projectManager;
+    }
+    public void setProjectManager(ProjectManager projectManager) {
+        this.projectManager = projectManager;
+    }
+    public void setTeamLead(TeamLead teamLead) {
+        this.teamLead = teamLead;
+    }
+    public TeamLead getTeamLead() {
+        return teamLead;
+    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TeamLead teamLead;
 }

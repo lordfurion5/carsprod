@@ -1,9 +1,8 @@
 package management.system.at.an.IT.enterprise.demo.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
+
 @Entity
 public class Tasks {
     @Id
@@ -12,6 +11,8 @@ public class Tasks {
 
     private String name;
 
+    private String taskDesc;
+
     public long getId() {
         return id;
     }
@@ -19,14 +20,46 @@ public class Tasks {
     public void setId(long id) {
         this.id = id;
     }
+    public Tasks(){
 
+    }
+    public Tasks(String name, String desc){
+        this.name=name;
+        this.taskDesc=desc;
+    }
 
     public String getName() {
         return name;
     }
 
+    public String getTaskDesc() {
+        return taskDesc;
+    }
 
     public void setName(String name) {
         this.name = name;
     }
+
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Project project;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Developers developers;
+    public Developers getDevelopers() {
+        return developers;
+    }
+    public void setDevelopers(Developers developers) {
+        this.developers = developers;
+    }
+
 }
