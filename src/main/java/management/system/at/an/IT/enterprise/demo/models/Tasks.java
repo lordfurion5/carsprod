@@ -39,6 +39,11 @@ public class Tasks {
     public void setName(String name) {
         this.name = name;
     }
+    public void setTaskDesc(String taskDesc) {
+        this.taskDesc = taskDesc;
+    }
+
+
 
 
     public void setProject(Project project) {

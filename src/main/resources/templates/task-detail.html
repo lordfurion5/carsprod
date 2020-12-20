@@ -23,8 +23,11 @@
             <strong class="text-gray-dark"><h4 th:text="${el.name}" /></strong>
             <strong class="text-gray-dark">Описание задачи: <h4 th:text="${el.taskDesc}" /></strong>
         </div>
-        Разработчик: <strong class="text-gray-dark"><h6 th:text="${el.developers.name}" /></strong>
+        Разработчик: <strong cla    ss="text-gray-dark"><h6 th:text="${el.developers.name}" /></strong>
         <a th:href="'/tasks/' + ${el.id} + '/edit'">Изменить</a>
+        <form th:action="'/tasks/' + ${el.id} + '/delete'" method="post">
+            <button type="submit">Удалить</button>
+        </form>
     </div>
 
 </div>

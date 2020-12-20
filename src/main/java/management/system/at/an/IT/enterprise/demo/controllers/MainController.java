@@ -107,6 +107,19 @@ public class MainController {
         return "task-detail";
     }
 
+    @GetMapping("/tasks/{id}/edit")
+    public String taskEdit(@PathVariable(value = "id") long id, Model model) {
+        if (!taskRepo.existsById(id)){
+            return "redirect:/";
+        }
+        Optional<Tasks> tasks=taskRepo.findById(id);
+        ArrayList<Tasks> res =new ArrayList<>();
+        tasks.ifPresent(res::add);
+
+        model.addAttribute("task", res);
+        return "task-edit";
+    }
+
     @PostMapping("/addTask")
     public String addTaskPost(@RequestParam String name,@RequestParam Project project_id,@RequestParam String desc,@RequestParam Developers developer_id){
 
@@ -118,6 +131,7 @@ public class MainController {
 
         return "redirect:/getAllTasks";
     }
+
 
     @PostMapping("/addTeamLead")
     public String addTeamLeadPost(@RequestParam String name){
@@ -158,5 +172,26 @@ public class MainController {
         return "redirect:/getAllProject";
     }
 
+
+    @PostMapping("/tasks/{id}/edit")
+    public String updateTaskPost(@PathVariable(value = "id") long id,@RequestParam String desc, @RequestParam Developers developer_id){
+      Optional<Tasks> task=taskRepo.findById(id);
+      if (desc!=null){
+          task.get().setTaskDesc(desc);
+      }
+
+   if (developer_id!=null){
+            task.get().setDevelopers(developer_id);}
+
+        taskRepo.save(task.get());
+
+        return "redirect:/getAllTasks";
+    }
+
+    @PostMapping("/tasks/{id}/delete")
+    public String deleteTaskPost(@PathVariable(value = "id") long id){
+        taskRepo.deleteById(id);
+        return "redirect:/getAllTasks";
+    }
 
 }
