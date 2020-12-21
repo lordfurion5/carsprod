@@ -40,6 +40,13 @@ public class MainController {
         return "project";
     }
 
+    @GetMapping("/")
+    public String home(Model model) {
+        Iterable<Project> projects=projectRepo.findAll();
+        model.addAttribute("projects", projects);
+        return "project";
+    }
+
     @GetMapping("/getAllTeamLead")
     public String getAllTeamLead(Model model) {
         Iterable<TeamLead> teamLeads=teamLeadRepo.findAll();
@@ -171,6 +178,7 @@ public class MainController {
 
         return "redirect:/getAllProject";
     }
+
 
 
     @PostMapping("/tasks/{id}/edit")
