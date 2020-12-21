@@ -3,6 +3,7 @@ package management.system.at.an.IT.enterprise.demo.models;
 import javax.persistence.*;
 import java.util.Set;
 
+
 @Entity
 public class Tasks {
     @Id
