@@ -10,11 +10,13 @@
 </head>
 <header th:insert="blocks/header :: header"></header>
 <body>
-<form action="/addTeamLead" method="post">
-    <input type="textarea" name="name" placeholder="Введите имя"/>
-    <button type="submit">Добавить</button>
-</form>
-
+<h1>Редактировать машину</h1>
+<div th:each="el:${car}">
+    <form method="post">
+        <input type="text" th:value="${el.desc}" name="desc" placeholder="Изменить описание машины"/>
+        <button type="submit">Обновить</button>
+    </form>
+</div>
 <!--<div th:each="el : ${projects}" class="alert alert-info mt-2">-->
 <!--    <h3 th:text="${el.name}"/>-->
 <!--</div>-->

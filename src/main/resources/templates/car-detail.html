@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!-- Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<header th:insert="blocks/header :: header"></header>
+<body>
+<br>
+<!--<p th:text="'Hello, ' + ${title} + '!'" />-->
+
+
+
+
+<div class="card-deck mb-3 text-center">
+    <div class="card mb-4 box-shadow" th:each="el : ${car}">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal" th:text="${el.name} "/>
+        </div>
+        <div class="card-body">
+            <p>ID</p>
+            <p class="card-text mb-auto" th:text="${el.id}"></p>
+            <h1 class="card-title pricing-card-title"  th:text="${el.desc}"/>
+
+            <form th:action="'/car/' + ${el.id} + '/delete'" method="post">
+            <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Удалить</button>
+            </form>
+
+            <button type="button" class="btn btn-lg btn-block btn-outline-primary"><a  th:href="'/car/' + ${el.id} + '/edit'">Изменить</a> </button>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+</body>
+</html>

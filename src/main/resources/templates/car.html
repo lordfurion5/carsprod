@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <!-- Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<header th:insert="blocks/header :: header"></header>
+<body>
+<br>
+
+<a href="/addCar">Добавить новую машину</a>
+
+
+<div  class="row mb-2">
+    <div th:each="el : ${car}" class="col-md-6">
+        <div class="card flex-md-row mb-4 box-shadow h-md-250">
+            <div class="card-body d-flex flex-column align-items-start">
+                <strong class="d-inline-block mb-2 text-primary"><h4 th:text="${el.manufacturer.name}" /></strong>
+
+                <h3 class="mb-0">
+                    <a class="text-dark" href="#"><h5 th:text="${el.name}" /></a>
+                </h3>
+
+                <p class="card-text mb-auto" th:text="${el.desc}"></p>
+                <a th:href="'/car/' + ${el.id}">Детально</a>
+
+        </div>
+            <img class="card-img-right flex-auto d-none d-md-block" data-src="holder.js/200x250?theme=thumb" alt="Thumbnail [200x250]" style="width: 200px; height: 250px;" th:src="${el.photoURL}"; data-holder-rendered="true">
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+</div>
+</body>
+</html>

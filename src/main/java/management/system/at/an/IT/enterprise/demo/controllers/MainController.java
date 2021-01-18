@@ -16,191 +16,164 @@ import java.util.Optional;
 
 @Controller
 public class MainController {
+
+
     @Autowired
-    private ProjectRepo projectRepo;
+    private ManufacturerRepo manufacturerRepo;
+
     @Autowired
-    private TaskRepo taskRepo;
+    private CarRepo carRepo;
+
     @Autowired
-    private TeamLeadRepo teamLeadRepo;
+    private AssessmentRepo assessmentRepo;
+
     @Autowired
-    private DeveloperRepo developerRepo;
-    @Autowired
-    private ProjectManagerRepo projectManagerRepo;
+    private CommentRepo commentRepo;
 
-    @GetMapping("/getAllTasks")
-    public String getAllTasks(Model model){
-        Iterable<Tasks> tasks=taskRepo.findAll();
-        model.addAttribute("tasks", tasks);
-        return "task-main";
-    }
-
-    @GetMapping("/getAllProject")
-    public String getAllProject(Model model) {
-        Iterable<Project> projects=projectRepo.findAll();
-        model.addAttribute("projects", projects);
-        return "project";
-    }
-
-    @GetMapping("/")
-    public String home(Model model) {
-        Iterable<Project> projects=projectRepo.findAll();
-        model.addAttribute("projects", projects);
-        return "project";
-    }
-
-    @GetMapping("/getAllTeamLead")
-    public String getAllTeamLead(Model model) {
-        Iterable<TeamLead> teamLeads=teamLeadRepo.findAll();
-        model.addAttribute("teamLead", teamLeads);
-        return "teamLead";
+    @GetMapping("/getAllManufacturers")
+    public String getAllManufacturer(Model model) {
+        Iterable<Manufacturer> manufacturers=manufacturerRepo.findAll();
+        model.addAttribute("manufacturer", manufacturers);
+        return "manufacturer";
     }
 
 
-    @GetMapping("/getAllDeveloper")
-    public String getAllDeveloper(Model model) {
-        Iterable<Developers> developers=developerRepo.findAll();
-        model.addAttribute("developers", developers);
-        return "developers";
+    @GetMapping("/addManufacturer")
+    public String addManufacturerGet(Model model){
+        return "addManufacturer";
     }
 
-    @GetMapping("/getAllProjectManager")
-    public String getAllPM(Model model) {
-        Iterable<ProjectManager> projectManagers=projectManagerRepo.findAll();
-        model.addAttribute("projectManagers", projectManagers);
-        return "projectManager";
+    @PostMapping("/addManufacturer")
+    public String addManufacturerPost(@RequestParam String name,@RequestParam String logo){
+
+        Manufacturer expected = new Manufacturer(name,logo);
+        manufacturerRepo.save(expected);
+
+        return "redirect:/getAllManufacturers";
     }
 
-    @GetMapping("/addTask")
-    public String addTaskGet(Model model){
-        return "addTask";
+    @GetMapping("/manufacturer/{id}")
+    public String manufacturerDetail(@PathVariable(value = "id") long id, Model model) {
+        Optional<Manufacturer> manufacturer=manufacturerRepo.findById(id);
+        ArrayList<Manufacturer> res =new ArrayList<>();
+        manufacturer.ifPresent(res::add);
+
+        model.addAttribute("manufacturer", res);
+        return "manufacturer-detail";
     }
 
-    @GetMapping("/addProject")
-    public String addProjectGet(Model model){
-        return "addProject";
+
+
+    @GetMapping("/getAllCar")
+    public String getAllCar(Model model) {
+        Iterable<Car> car=carRepo.findAll();
+        model.addAttribute("car", car);
+        return "car";
     }
 
-    @GetMapping("/addTeamLead")
-    public String addTeamLeadGet(Model model){
-        return "addTeamLead";
+    @GetMapping("/addCar")
+    public String addCarGet(Model model){
+        return "addCar";
     }
 
-    @GetMapping("/addDevelopers")
-    public String addDeveloperGet(Model model){
-        return "addDevelopers";
+    @PostMapping("/addCar")
+    public String addCarPost(@RequestParam String name,@RequestParam String photoURL,@RequestParam String desc,@RequestParam Manufacturer manufacturer_id){
+
+        Car expected = new Car(name,photoURL,desc);
+        expected.setManufacturer(manufacturer_id);
+        carRepo.save(expected);
+
+        return "redirect:/getAllCar";
     }
 
-    @GetMapping("/addProjectManager")
-    public String addProjectManagerGet(Model model){
-        return "addPM";
+
+    @GetMapping("/car/{id}")
+    public String carDetail(@PathVariable(value = "id") long id, Model model) {
+        Optional<Car> car=carRepo.findById(id);
+        ArrayList<Car> res =new ArrayList<>();
+        car.ifPresent(res::add);
+
+        model.addAttribute("car", res);
+        return "car-detail";
     }
 
-    @GetMapping("/project/{id}")
-    public String projectDetail(@PathVariable(value = "id") long id, Model model) {
-        Optional<Project> projects=projectRepo.findById(id);
-        ArrayList<Project> res =new ArrayList<>();
-        projects.ifPresent(res::add);
-
-        model.addAttribute("projects", res);
-        return "project-detail";
-    }
-
-    @GetMapping("/tasks/{id}")
-    public String taskDetail(@PathVariable(value = "id") long id, Model model) {
-        Optional<Tasks> tasks=taskRepo.findById(id);
-        ArrayList<Tasks> res =new ArrayList<>();
-        tasks.ifPresent(res::add);
-
-        model.addAttribute("task", res);
-        return "task-detail";
-    }
-
-    @GetMapping("/tasks/{id}/edit")
-    public String taskEdit(@PathVariable(value = "id") long id, Model model) {
-        if (!taskRepo.existsById(id)){
+    @GetMapping("/car/{id}/edit")
+    public String carEdit(@PathVariable(value = "id") long id, Model model) {
+        if (!carRepo.existsById(id)){
             return "redirect:/";
         }
-        Optional<Tasks> tasks=taskRepo.findById(id);
-        ArrayList<Tasks> res =new ArrayList<>();
-        tasks.ifPresent(res::add);
+        Optional<Car> car=carRepo.findById(id);
+        ArrayList<Car> res =new ArrayList<>();
+        car.ifPresent(res::add);
 
-        model.addAttribute("task", res);
-        return "task-edit";
+        model.addAttribute("car", res);
+        return "car-edit";
     }
 
-    @PostMapping("/addTask")
-    public String addTaskPost(@RequestParam String name,@RequestParam Project project_id,@RequestParam String desc,@RequestParam Developers developer_id){
+    @PostMapping("/car/{id}/edit")
+    public String updateCarPost(@PathVariable(value = "id") long id,@RequestParam String desc){
+        Optional<Car> car=carRepo.findById(id);
+        if (desc!=null){
+            car.get().setDesc(desc);
+        }
 
-        System.out.println(project_id);
-        Tasks expected = new Tasks(name,desc);
-        expected.setProject(project_id);
-        expected.setDevelopers(developer_id);
-        taskRepo.save(expected);
 
-        return "redirect:/getAllTasks";
+        carRepo.save(car.get());
+
+        return "redirect:/getAllCar";
     }
-
-
-    @PostMapping("/addTeamLead")
-    public String addTeamLeadPost(@RequestParam String name){
-
-        TeamLead expected = new TeamLead(name);
-        teamLeadRepo.save(expected);
-
-        return "redirect:/getAllTeamLead";
-    }
-
-    @PostMapping("/addProjectManager")
-    public String addProjectManagerPost(@RequestParam String name){
-
-        ProjectManager expected = new ProjectManager(name);
-        projectManagerRepo.save(expected);
-
-        return "redirect:/getAllProjectManager";
-    }
-
-    @PostMapping("/addDevelopers")
-    public String addDeveloperPost(@RequestParam String name){
-
-        Developers expected = new Developers(name);
-        developerRepo.save(expected);
-
-        return "redirect:/getAllDeveloper";
-    }
-
-    @PostMapping("/addProject")
-    public String addProjectPost(@RequestParam String name,@RequestParam ProjectManager project_manager_id,@RequestParam TeamLead team_lead_id){
-        System.out.println(name);
-        Project expected = new Project(name);
-        expected.setProjectManager(project_manager_id);
-        expected.setTeamLead(team_lead_id);
-
-        projectRepo.save(expected);
-
-        return "redirect:/getAllProject";
+    @PostMapping("/car/{id}/delete")
+    public String deleteCarPost(@PathVariable(value = "id") long id){
+        carRepo.deleteById(id);
+        return "redirect:/getAllCar";
     }
 
 
-
-    @PostMapping("/tasks/{id}/edit")
-    public String updateTaskPost(@PathVariable(value = "id") long id,@RequestParam String desc, @RequestParam Developers developer_id){
-      Optional<Tasks> task=taskRepo.findById(id);
-      if (desc!=null){
-          task.get().setTaskDesc(desc);
-      }
-
-   if (developer_id!=null){
-            task.get().setDevelopers(developer_id);}
-
-        taskRepo.save(task.get());
-
-        return "redirect:/getAllTasks";
+    @GetMapping("/getAllAssessment")
+    public String getAllAssessment(Model model) {
+        Iterable<Assessment> assessments=assessmentRepo.findAll();
+        model.addAttribute("assessments", assessments);
+        return "assessments";
     }
 
-    @PostMapping("/tasks/{id}/delete")
-    public String deleteTaskPost(@PathVariable(value = "id") long id){
-        taskRepo.deleteById(id);
-        return "redirect:/getAllTasks";
+
+    @GetMapping("/addAssessment")
+    public String addAssessmentGet(Model model){
+        return "addAssessment";
+    }
+
+    @PostMapping("/addAssessment")
+    public String addAssessmentPost(@RequestParam String reliability,@RequestParam String quality,@RequestParam String service,@RequestParam Car car_id){
+
+        Assessment expected = new Assessment(reliability,quality,service);
+        expected.setCar(car_id);
+        assessmentRepo.save(expected);
+
+
+        return "redirect:/getAllAssessment";
+    }
+
+    @GetMapping("/getAllComment")
+    public String getAllComment(Model model) {
+        Iterable<Comment> comments=commentRepo.findAll();
+        model.addAttribute("comments", comments);
+        return "comment";
+    }
+
+
+    @GetMapping("/addComment")
+    public String addCommentGet(Model model){
+        return "addComment";
+    }
+
+    @PostMapping("/addComment")
+    public String addCommentPost(@RequestParam String title,@RequestParam String name,@RequestParam Car car_id){
+
+        Comment expected = new Comment(title,name);
+        expected.setCar(car_id);
+        commentRepo.save(expected);
+
+        return "redirect:/getAllComment";
     }
 
 }
